@@ -1,0 +1,87 @@
+{
+  "name": "project-hub",
+  "version": "3.22.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "clean": "rimraf .next .swc out coverage",
+    "lint": "next lint",
+    "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
+    "check-types": "tsc --noEmit --pretty && tsc --project cypress --noEmit --pretty",
+    "commit": "cz",
+    "prepare": "husky install",
+    "postbuild": "next-sitemap"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
+    "next": "^13.5.3",
+    "next-seo": "^6.1.0",
+    "next-sitemap": "^4.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "sharp": "^0.32.6",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/cz-commitlint": "^17.7.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.24",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "autoprefixer": "^10.4.16",
+    "commitizen": "^4.3.0",
+    "cssnano": "^6.0.1",
+    "eslint": "^8.50.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-next": "^13.5.3",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-tailwindcss": "^3.13.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "semantic-release": "^19.0.5",
+    "tailwindcss": "^3.3.3",
+    "tsx": "^3.13.0",
+    "typescript": "^5.2.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
+  },
+  "author": "Ixartz (https://github.com/ixartz)"
+}
