@@ -1,6 +1,9 @@
 import '@/styles/global.css';
 
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   icons: [
@@ -25,6 +28,9 @@ export const metadata: Metadata = {
       url: '/favicon.ico',
     },
   ],
+
+  title: 'ProjectHub',
+  description: 'Find your next science project',
 };
 
 export default function RootLayout({
@@ -34,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
