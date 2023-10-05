@@ -55,6 +55,7 @@ export function LoginForm() {
         onSuccess: (data) => {
           document.cookie = `token=${data.token}`;
           router.replace('/');
+          router.refresh();
         },
       },
     );

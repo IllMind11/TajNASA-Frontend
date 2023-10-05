@@ -95,6 +95,7 @@ export function RegisterForm() {
         onSuccess: (data) => {
           document.cookie = `token=${data.token}`;
           router.replace('/');
+          router.refresh();
         },
       },
     );
