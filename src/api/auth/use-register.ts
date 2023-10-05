@@ -21,6 +21,17 @@ type Response = {
 };
 
 export const useRegister = createMutation<Response, Variables, HTTPError>({
-  mutationFn: async (variables) =>
-    client.post('auth/register', { json: { ...variables } }).json(),
+  mutationFn: async (variables) => {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(variables)) {
+      formData.append(key, value.toString());
+    }
+
+    return client
+      .post('auth/signup', {
+        body: formData,
+      })
+      .json();
+  },
 });

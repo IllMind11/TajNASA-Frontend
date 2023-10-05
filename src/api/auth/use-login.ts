@@ -16,6 +16,17 @@ type Response = {
 };
 
 export const useLogin = createMutation<Response, Variables, HTTPError>({
-  mutationFn: async (variables) =>
-    client.post('auth/login', { json: { ...variables } }).json(),
+  mutationFn: async (variables) => {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(variables)) {
+      formData.append(key, value);
+    }
+
+    return client
+      .post('auth/login', {
+        body: formData,
+      })
+      .json();
+  },
 });

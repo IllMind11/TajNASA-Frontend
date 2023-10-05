@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -60,6 +61,8 @@ const formSchema = z
   });
 
 export function RegisterForm() {
+  const router = useRouter();
+
   const { mutate: register, isLoading } = useRegister();
   const { data: countries } = useCountries();
 
@@ -87,6 +90,11 @@ export function RegisterForm() {
           for (const [key, value] of Object.entries(data.errors)) {
             form.setError(key as any, { message: value as string });
           }
+        },
+
+        onSuccess: (data) => {
+          document.cookie = `token=${data.token}`;
+          router.replace('/');
         },
       },
     );

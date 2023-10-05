@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -19,10 +20,11 @@ import { Input } from '@/components/ui/input';
 const formSchema = z.object({
   email: z.string().email(),
 
-  password: z.string({ required_error: 'Required' }),
+  password: z.string().min(1, 'Required'),
 });
 
 export function LoginForm() {
+  const router = useRouter();
   const { mutate: login, isLoading } = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,6 +50,11 @@ export function LoginForm() {
 
           form.setError('email', { message: '' });
           form.setError('email', { message: 'Unexpected Error!' });
+        },
+
+        onSuccess: (data) => {
+          document.cookie = `token=${data.token}`;
+          router.replace('/');
         },
       },
     );

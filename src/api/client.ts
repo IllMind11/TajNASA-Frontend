@@ -5,5 +5,6 @@ export const client = ky.create({
   mode: 'cors',
   headers: {
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
   },
 });

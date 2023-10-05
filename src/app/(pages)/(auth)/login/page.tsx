@@ -1,3 +1,5 @@
+'use client';
+
 import { Background } from '@/components/background';
 
 import { LoginForm } from './_components/login-form';
