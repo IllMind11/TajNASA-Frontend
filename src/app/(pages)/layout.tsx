@@ -1,3 +1,4 @@
+import { Background } from '@/components/background';
 import { MainNav } from '@/components/main-nav/main-nav';
 
 export default function MainLayout({
@@ -8,7 +9,10 @@ export default function MainLayout({
   return (
     <>
       <MainNav />
-      <main>{children}</main>
+      <main>
+        <Background />
+        {children}
+      </main>
     </>
   );
 }

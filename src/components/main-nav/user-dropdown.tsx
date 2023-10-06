@@ -25,7 +25,7 @@ export function UserDropdown({ user }: { user: User }) {
           <AvatarFallback>{user.firstname.slice(0, 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuLabel>
           {`${user.firstname} ${user.lastname}`}
         </DropdownMenuLabel>

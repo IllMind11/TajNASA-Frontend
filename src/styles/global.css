@@ -74,3 +74,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap.ProseMirror {
+  @apply border border-border rounded-md drop-shadow-sm px-4 py-2 text-base min-h-[6rem] focus:border-neutral-900
+}
+
+[data-drag-handle] {
+  display: none;
+}
+

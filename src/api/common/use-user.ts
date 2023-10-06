@@ -11,9 +11,17 @@ export const useUser = async () => {
 
   const user: unknown = await client
     .get(`user`, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
+      hooks: {
+        afterResponse: [
+          (_input, _options, response) => {
+            if (!response.ok) return new Response(null, { status: 401 });
+
+            return response;
+          },
+        ],
       },
+
+      throwHttpErrors: false,
     })
     .json();
 

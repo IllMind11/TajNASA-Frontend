@@ -19,7 +19,13 @@ export async function MainNav() {
         </Link>
 
         {user ? (
-          <UserDropdown user={user} />
+          <div className="flex items-center gap-8">
+            <Link href="/project/create">
+              <Button>New Project</Button>
+            </Link>
+
+            <UserDropdown user={user} />
+          </div>
         ) : (
           <div className="space-x-3">
             <Link href="/register" scroll={false}>

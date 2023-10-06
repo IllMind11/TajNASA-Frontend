@@ -1,7 +1,6 @@
 import Balancer from 'react-wrap-balancer';
 
 import { useProjects } from '@/api/projects/use-projects';
-import { Background } from '@/components/background';
 
 import { ProjectsList } from './_components/projects-list';
 
@@ -10,8 +9,6 @@ export default async function Home() {
 
   return (
     <>
-      <Background />
-
       <div className="container m-5 mx-auto flex min-h-[45vh] flex-col justify-center">
         <div className="my-auto">
           <h1 className="my-10 w-full bg-gradient-to-b from-black to-neutral-500 bg-clip-text text-center text-[max(36px,min(5vw,65px))] font-extrabold leading-tight tracking-tight text-transparent sm:leading-normal">
