@@ -1,8 +1,10 @@
 'use client';
 
+import { CheckIcon, PlusIcon, TimerIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 
-import { useCreateMember } from '@/api/projects/use-create-member';
+import { useCreateMember } from '@/api/members/use-create-member';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 type JoinButtonProps = {
@@ -41,13 +43,21 @@ export function JoinButton({
             })
           }
         >
-          Join
+          Join <PlusIcon className="ml-1" />
         </Button>
       ) : (
-        <Button disabled>
-          {member_status === '0' && 'Requested'}
-          {member_status === '1' && 'Approved'}
-        </Button>
+        <>
+          {member_status === '0' && (
+            <Badge variant="secondary">
+              Requested <TimerIcon className="ml-1" />
+            </Badge>
+          )}
+          {member_status === '1' && (
+            <Badge variant="secondary">
+              Approved <CheckIcon className="ml-1" />
+            </Badge>
+          )}
+        </>
       )}
     </>
   );

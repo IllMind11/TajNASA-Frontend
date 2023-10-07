@@ -7,12 +7,16 @@ import type { Project } from '@/api/types';
 export function ProjectItem({ project }: { project: Project }) {
   return (
     <Link
-      href={`/project/${project.id}`}
+      href={`/projects/${project.id}`}
       className="flex w-full max-w-6xl items-center gap-7 rounded-xl border border-border bg-card/90 p-4"
     >
-      <div className="relative h-28 w-28">
+      <div className="relative h-28 w-28 shrink-0">
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${project?.photos[0]?.url}`}
+          src={
+            project?.photos[0]?.url
+              ? `${process.env.NEXT_PUBLIC_API_URL}/storage/${project?.photos[0]?.url}`
+              : '/assets/images/image-placeholder.jpg'
+          }
           alt={project.name}
           fill
           className="shrink-0 rounded-lg object-cover"

@@ -1,6 +1,10 @@
+import { useTags } from '@/api/common/use-tags';
+
 import { ProjectForm } from './_components/project-form';
 
-export default function CreateProject() {
+export default async function CreateProject() {
+  const tags = await useTags();
+
   return (
     <div className="container">
       <div className="mt-16 w-full">
@@ -9,7 +13,7 @@ export default function CreateProject() {
         </h1>
 
         <div className="mx-auto my-14 max-w-3xl rounded-2xl border border-border bg-white p-6 shadow">
-          <ProjectForm />
+          <ProjectForm tags={tags} />
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ export type Variables = {
   description: string;
   content: string;
   photo: any;
+  tags: number[];
 };
 
 type Response = {
@@ -21,7 +22,10 @@ export const useCreateProject = createMutation<Response, Variables, HTTPError>({
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(variables)) {
-      formData.append(key, value);
+      formData.append(
+        key,
+        Array.isArray(value) ? JSON.stringify(value) : value,
+      );
     }
 
     return client

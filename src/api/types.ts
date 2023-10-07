@@ -38,3 +38,8 @@ export type Member = {
   created_at: Date;
   updated_at: Date;
 };
+
+export type Tag = {
+  id: number;
+  name: string;
+};

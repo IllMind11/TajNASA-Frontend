@@ -12,9 +12,9 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-    padding: '1.5rem',
+    padding: '1.1rem',
     screens: {
-      '2xl': '1400px',
+      '2xl': '1250px',
     },
   },
   extend: {

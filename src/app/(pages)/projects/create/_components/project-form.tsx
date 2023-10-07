@@ -2,11 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { useCreateProject } from '@/api/projects/use-create-project';
+import type { Tag } from '@/api/types';
 import { RichTextEditor } from '@/components/editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { MultiSelect } from '@/components/ui/multi-select';
 
 const formSchema = z.object({
   name: z
@@ -35,13 +37,18 @@ const formSchema = z.object({
     .min(250, 'Detailed description should have at least 200 characters'),
 
   photo: z.string().min(1, 'Required'),
+
+  tags: z.number().array().nonempty({ message: 'Required' }),
 });
 
-export function ProjectForm() {
+export function ProjectForm({ tags }: { tags: Tag[] }) {
   const router = useRouter();
   const { mutate: createProject, isLoading } = useCreateProject();
 
   const imageRef = useRef<HTMLInputElement>(null);
+  const projectTags = useMemo(() => {
+    return tags.map((tag) => ({ value: tag.id, label: tag.name }));
+  }, [tags]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +57,7 @@ export function ProjectForm() {
       description: '',
       content: '',
       photo: '',
+      tags: [],
     },
   });
 
@@ -122,6 +130,25 @@ export function ProjectForm() {
                 <FormLabel>Image</FormLabel>
                 <FormControl>
                   <Input type="file" {...field} ref={imageRef} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <MultiSelect
+                    options={projectTags}
+                    placeholder="Select Tags"
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

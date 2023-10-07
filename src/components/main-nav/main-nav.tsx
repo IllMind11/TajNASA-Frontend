@@ -20,7 +20,7 @@ export async function MainNav() {
 
         {user ? (
           <div className="flex items-center gap-8">
-            <Link href="/project/create">
+            <Link href="/projects/create">
               <Button>New Project</Button>
             </Link>
 
