@@ -39,13 +39,13 @@ export function UserDropdown({ user }: { user: User }) {
           {`${user.firstname} ${user.lastname}`}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            router.push('/profile');
-          }}
-          className="inline-flex w-full justify-between"
-        >
-          Profile <PersonIcon />
+        <DropdownMenuItem>
+          <a
+            href="/profile"
+            className="flex w-full items-center justify-between"
+          >
+            Profile <PersonIcon />
+          </a>
         </DropdownMenuItem>
 
         <DropdownMenuItem

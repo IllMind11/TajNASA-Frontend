@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'apod.nasa.gov',
+        port: '',
+        pathname: '/apod/**',
+      },
     ],
   },
 

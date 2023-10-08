@@ -7,9 +7,9 @@ export default function ProjectsLoader() {
         <div
           // eslint-disable-next-line react/no-array-index-key
           key={index}
-          className="flex w-full max-w-6xl items-center gap-7 rounded-xl border border-border bg-card/90 p-4"
+          className="flex w-full max-w-6xl flex-col items-center gap-7 rounded-xl border border-border bg-card/90 p-4 sm:flex-row"
         >
-          <Skeleton className="relative h-28 w-28 shrink-0  rounded-lg" />
+          <Skeleton className="relative h-[220px] w-full shrink-0 rounded-lg sm:h-28  sm:w-28" />
 
           <div className="w-full space-y-2">
             <Skeleton className="mb-5 h-6 w-full" />

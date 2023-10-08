@@ -28,6 +28,15 @@ export function MultiSelect({
   const [selected, setSelected] = React.useState<Options[]>([]);
   const [inputValue, setInputValue] = React.useState('');
 
+  React.useEffect(() => {
+    if (!value) return;
+
+    setSelected(() => {
+      return value.map((_v, index) => options[index]!);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleUnselect = React.useCallback((option: Options) => {
     setSelected((prev) => prev.filter((s) => s.value !== option.value));
   }, []);

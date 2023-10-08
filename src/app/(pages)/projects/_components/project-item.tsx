@@ -19,9 +19,9 @@ export function ProjectItem({ project }: { project: Project }) {
               `callbackUrl=/projects/${project.id}`,
             )}`
       }
-      className="flex w-full max-w-6xl items-center gap-7 rounded-xl border border-border bg-card/90 p-4"
+      className="flex w-full max-w-6xl flex-col items-start gap-7 rounded-xl border border-border bg-card/90 p-4 sm:flex-row sm:items-center"
     >
-      <div className="relative h-28 w-28 shrink-0">
+      <div className="relative h-[220px] w-full shrink-0 sm:h-28 sm:w-28">
         <Image
           src={
             project?.photos[0]?.url
@@ -48,9 +48,9 @@ export function ProjectItem({ project }: { project: Project }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="stroke-secondary-foreground"
           >
             <path d="M9 5H2v7l6.29 6.29c.94.94 2.48.94 3.42 0l3.58-3.58c.94-.94.94-2.48 0-3.42L9 5Z" />

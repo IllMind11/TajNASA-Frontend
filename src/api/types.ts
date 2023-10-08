@@ -49,3 +49,32 @@ export type Tag = {
   id: number;
   name: string;
 };
+
+export type Education = {
+  id: number;
+  user_id: number;
+  name: string;
+  description: string;
+  from: string;
+  to: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type Forum = {
+  id: number;
+  name: string;
+  project_id: number;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type Post = {
+  id: number;
+  content: string;
+  user_id: number;
+  forum_id: number;
+  user: User;
+  created_at: Date;
+  updated_at: Date;
+};

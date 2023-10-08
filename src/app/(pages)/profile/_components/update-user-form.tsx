@@ -95,7 +95,11 @@ export function UpdateUserForm({ user, setDialogOpen }: UpdateUserFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    updateUser({ ...values, photo: imageRef?.current?.files?.[0] || null });
+    updateUser({
+      ...values,
+      photo: imageRef?.current?.files?.[0] || null,
+      password: values.password || '',
+    });
   }
 
   return (

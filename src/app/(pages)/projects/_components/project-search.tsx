@@ -3,7 +3,7 @@
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { usePathname, useRouter } from 'next/navigation';
 import type { FormEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,12 @@ export function ProjectSearch() {
   const pathname = usePathname();
 
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    if (!search) {
+      router.replace(pathname);
+    }
+  }, [pathname, router, search]);
 
   function handleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

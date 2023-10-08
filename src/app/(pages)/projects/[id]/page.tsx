@@ -1,13 +1,18 @@
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, Pencil2Icon } from '@radix-ui/react-icons';
+import { format } from 'date-fns';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { useUser } from '@/api/common/use-user';
 import { useProjectMember } from '@/api/members/use-project-member';
+import { useForums } from '@/api/project-forum/forum/use-forums';
 import { useProject } from '@/api/projects/use-project';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 import { ApproveMemberDialog } from './_components/approve-member-dialog';
+import { CreateForumDialog } from './_components/create-forum-dialog';
 import { DeleteMemberDialog } from './_components/delete-member-dialog';
 import { DeleteProjectDialog } from './_components/delete-project-dialog';
 import { JoinButton } from './_components/join-button';
@@ -26,9 +31,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     member_id: user?.id,
   });
 
-  if (!project) return notFound();
+  const forums = await useForums({ project_id: project.project.id });
 
-  const date = new Date(project.project.created_at);
+  if (!project) return notFound();
 
   return (
     <div className="container gap-5 lg:grid lg:grid-cols-7">
@@ -80,12 +85,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="rounded-xl border border-border bg-card/90 p-5">
           <div className="mb-2 flex items-center justify-between">
             <p className="mb-2 inline-flex items-center gap-2 text-neutral-700 dark:text-neutral-200">
-              <CalendarIcon /> {date.getDay()}-{date.getMonth()}-
-              {date.getFullYear()}
+              <CalendarIcon />{' '}
+              {format(new Date(project.project.created_at), 'd MMMM Y')}
             </p>
 
             {project.is_admin && (
-              <DeleteProjectDialog project_id={project.project.id} />
+              <div className="space-x-2">
+                <Link href={`/projects/edit/${project.project.id}`}>
+                  <Button variant="secondary" size="icon">
+                    <Pencil2Icon />
+                  </Button>
+                </Link>
+                <DeleteProjectDialog project_id={project.project.id} />
+              </div>
             )}
           </div>
 
@@ -105,9 +117,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.project.members.map((m) => (
               <li key={m.id}>
                 <div className="flex items-center justify-between gap-3">
-                  <p className="line-clamp-1">
+                  <Link
+                    href={`/user/${m.user_id}`}
+                    className="line-clamp-1 underline-offset-4 hover:underline"
+                  >
                     {m.user.firstname} {m.user.lastname}
-                  </p>
+                  </Link>
 
                   <div className="flex items-center gap-1">
                     {m?.type === '1' && (
@@ -133,6 +148,32 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ))}
           </ul>
         </div>
+
+        {forums.data.length || project.is_admin ? (
+          <div className="rounded-xl border border-border bg-card/90 p-5">
+            {project.is_admin && (
+              <CreateForumDialog project_id={project.project.id} />
+            )}
+
+            {forums.data.length ? (
+              <>
+                <h5 className="my-3 text-lg font-semibold">Forums</h5>
+
+                <ul className="flex flex-col gap-2">
+                  {forums.data.map((forum) => (
+                    <li key={forum.id}>
+                      <Link href={`/forum/${forum.id}`}>
+                        <Button className="w-full text-sm" variant="secondary">
+                          {forum.name}
+                        </Button>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );

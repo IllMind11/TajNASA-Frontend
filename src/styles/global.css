@@ -83,3 +83,6 @@
   display: none;
 }
 
+.rdp-vhidden {
+  @apply hidden;
+}

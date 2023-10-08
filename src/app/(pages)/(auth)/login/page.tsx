@@ -11,6 +11,16 @@ export default function Register() {
         </h1>
 
         <LoginForm />
+
+        <div className="mt-5">
+          <p>Demo User:</p>
+          <p>
+            Email: <strong>admin@admin.com</strong>
+          </p>
+          <p>
+            Password: <strong>password</strong>
+          </p>
+        </div>
       </div>
     </div>
   );

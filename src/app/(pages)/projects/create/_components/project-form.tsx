@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -43,7 +42,6 @@ const formSchema = z.object({
 });
 
 export function ProjectForm({ tags }: { tags: Tag[] }) {
-  const router = useRouter();
   const { mutate: createProject, isLoading } = useCreateProject();
 
   const imageRef = useRef<HTMLInputElement>(null);
@@ -71,8 +69,7 @@ export function ProjectForm({ tags }: { tags: Tag[] }) {
         onSuccess: () => {
           toast({ title: 'Project created successfully' });
 
-          router.replace('/');
-          router.refresh();
+          window.location.href = `/profile`;
         },
       },
     );
