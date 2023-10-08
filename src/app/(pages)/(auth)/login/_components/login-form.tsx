@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -16,6 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -25,6 +27,10 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const { toast } = useToast();
+
   const { mutate: login, isLoading } = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,6 +40,15 @@ export function LoginForm() {
       password: '',
     },
   });
+
+  useEffect(() => {
+    if (searchParams.get('callbackUrl')) {
+      toast({
+        title: 'Login to see the project',
+        variant: 'destructive',
+      });
+    }
+  }, [searchParams, toast]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     login(
@@ -53,8 +68,21 @@ export function LoginForm() {
         },
 
         onSuccess: (data) => {
+          toast({
+            title: 'Login Successfull',
+            duration: 1000,
+          });
+
           document.cookie = `token=${data.token}`;
-          router.replace('/');
+
+          const callbackUrl = searchParams.get('callbackUrl');
+
+          if (callbackUrl) {
+            router.replace(callbackUrl);
+          } else {
+            router.replace('/');
+          }
+
           router.refresh();
         },
       },

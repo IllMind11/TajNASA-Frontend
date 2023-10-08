@@ -57,7 +57,7 @@
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
  
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 98%;
  
     --border: 0 0% 14.9%;
@@ -76,7 +76,7 @@
 }
 
 .tiptap.ProseMirror {
-  @apply border border-border rounded-md drop-shadow-sm px-4 py-2 text-base min-h-[6rem] focus:border-neutral-900
+  @apply border border-border rounded-md drop-shadow-sm px-4 py-2 text-sm min-h-[6rem] focus:border-neutral-900
 }
 
 [data-drag-handle] {

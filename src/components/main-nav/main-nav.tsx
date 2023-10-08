@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { useUser } from '@/api/common/use-user';
 
+import { ThemeToggle } from '../theme-toggle';
 import { Button } from '../ui/button';
 import { UserDropdown } from './user-dropdown';
 
@@ -19,24 +20,33 @@ export async function MainNav() {
         </Link>
 
         {user ? (
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-5">
+            <Link href="/projects">
+              <Button variant="link">Projects</Button>
+            </Link>
+
             <Link href="/projects/create">
               <Button>New Project</Button>
             </Link>
 
             <UserDropdown user={user} />
+
+            <ThemeToggle />
           </div>
         ) : (
-          <div className="space-x-3">
+          <div className="flex items-center space-x-3">
+            <Link href="/projects">
+              <Button variant="link">Projects</Button>
+            </Link>
             <Link href="/register" scroll={false}>
               <Button variant="secondary">Register</Button>
             </Link>
 
-            <Button>
-              <Link href="/login" scroll={false}>
-                Login
-              </Link>
-            </Button>
+            <Link href="/login" scroll={false}>
+              <Button>Login</Button>
+            </Link>
+
+            <ThemeToggle />
           </div>
         )}
       </div>

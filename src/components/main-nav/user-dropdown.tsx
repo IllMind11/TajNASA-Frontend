@@ -1,11 +1,11 @@
 'use client';
 
-import { ThickArrowRightIcon } from '@radix-ui/react-icons';
+import { PersonIcon, ThickArrowRightIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 
 import type { User } from '@/api/types';
 
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +21,16 @@ export function UserDropdown({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
+        <Avatar className="cursor-pointer select-none">
+          <AvatarImage
+            className="object-cover"
+            alt="Profile Image"
+            src={
+              user?.photos[0]?.url
+                ? `${process.env.NEXT_PUBLIC_API_URL}/storage/${user?.photos[0]?.url}`
+                : ''
+            }
+          />
           <AvatarFallback>{user.firstname.slice(0, 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -30,6 +39,15 @@ export function UserDropdown({ user }: { user: User }) {
           {`${user.firstname} ${user.lastname}`}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => {
+            router.push('/profile');
+          }}
+          className="inline-flex w-full justify-between"
+        >
+          Profile <PersonIcon />
+        </DropdownMenuItem>
+
         <DropdownMenuItem
           onClick={() => {
             // eslint-disable-next-line no-useless-concat

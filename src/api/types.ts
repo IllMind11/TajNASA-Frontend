@@ -1,3 +1,12 @@
+export type Photo = {
+  id: number;
+  url: string;
+  photoable_type: string;
+  photoable_id: number;
+  created_at: Date;
+  updated_at: Date;
+};
+
 export type Project = {
   id: number;
   name: string;
@@ -6,14 +15,9 @@ export type Project = {
   members_count: number;
   created_at: Date;
   updated_at: Date;
-  photos: {
-    id: number;
-    url: string;
-    photoable_type: string;
-    photoable_id: number;
-    created_at: Date;
-    updated_at: Date;
-  }[];
+  photos: Photo[];
+  tags: Tag[];
+  members: Member[];
 };
 
 export type User = {
@@ -27,6 +31,7 @@ export type User = {
   email_verified_at: null;
   created_at: Date;
   updated_at: Date;
+  photos: Photo[];
 };
 
 export type Member = {
@@ -35,6 +40,7 @@ export type Member = {
   user_id: number;
   type: string;
   status: string;
+  user: User;
   created_at: Date;
   updated_at: Date;
 };

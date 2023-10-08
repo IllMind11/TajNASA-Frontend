@@ -2,7 +2,11 @@ import type { Project } from '@/api/types';
 
 import { ProjectItem } from './project-item';
 
-export function ProjectsList({ projects }: { projects: Project[] }) {
+type ProjectListProps = {
+  projects: Project[];
+};
+
+export function ProjectsList({ projects }: ProjectListProps) {
   return (
     <div className="container mb-5 mt-6 flex flex-col items-center justify-center space-y-6">
       {projects.map((project) => (

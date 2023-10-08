@@ -1,12 +1,13 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import type { Dispatch, SetStateAction } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { useRegister } from '@/api/auth/use-register';
 import { useCountries } from '@/api/common/use-countries';
+import { useUpdateUser } from '@/api/common/use-update-user';
+import type { User } from '@/api/types';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -24,94 +25,102 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useToast } from '@/components/ui/use-toast';
 
-const formSchema = z
-  .object({
-    firstname: z
-      .string()
-      .min(1, 'Required')
-      .min(2, 'Name should be at least 2 characters'),
+const formSchema = z.object({
+  photo: z.any(),
 
-    lastname: z
-      .string()
-      .min(1, 'Required')
-      .min(2, 'Last Name should be at least 2 characters'),
+  firstname: z
+    .string()
+    .min(1, 'Required')
+    .min(2, 'Name should be at least 2 characters'),
 
-    gender: z.coerce.number().positive({ message: 'Required' }),
+  lastname: z
+    .string()
+    .min(1, 'Required')
+    .min(2, 'Last Name should be at least 2 characters'),
 
-    country: z.coerce.number().positive({ message: 'Required' }),
+  gender: z.coerce.number().positive({ message: 'Required' }),
 
-    email: z.string().email(),
+  country: z.coerce.number().positive({ message: 'Required' }),
 
-    password: z
-      .string({ required_error: 'Required' })
-      .min(6, 'Password must be atleast 6 characters'),
+  email: z.string().email(),
 
-    passwordConfirm: z.string(),
+  password: z
+    .union([
+      z
+        .string()
+        .length(0, { message: 'Password should be at least 6 characters' }),
+      z.string().min(6),
+    ])
+    .optional()
+    .transform((e: any) => (e === '' ? undefined : e)),
 
-    phone: z.coerce
-      .number()
-      .positive({ message: 'Required' })
-      .min(12345, 'Phone number should contain at least 5 numbers')
-      .max(123456789012, 'Phone number should be less than 12'),
-  })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: "Passwords don't match",
-    path: ['passwordConfirm'],
-  });
+  phone: z.coerce
+    .number()
+    .positive({ message: 'Required' })
+    .min(12345, 'Phone number should contain at least 5 numbers')
+    .max(123456789012, 'Phone number should be less than 12'),
+});
 
-export function RegisterForm() {
+type UpdateUserFormProps = {
+  user: User;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export function UpdateUserForm({ user, setDialogOpen }: UpdateUserFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
 
-  const { mutate: register, isLoading } = useRegister();
+  const { mutate: updateUser, isLoading } = useUpdateUser({
+    onSuccess: () => {
+      router.refresh();
+      setDialogOpen(false);
+    },
+  });
   const { data: countries } = useCountries();
+
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: '',
-      lastname: '',
-      gender: 0,
-      country: 0,
-      email: '',
+      photo: '',
+      firstname: user.firstname,
+      lastname: user.lastname,
+      gender: Number(user.gender),
+      country: Number(user.country),
+      email: user.email,
+      phone: Number(user.phone),
       password: '',
-      passwordConfirm: '',
-      phone: undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    register(
-      { ...values },
-      {
-        onError: async (error) => {
-          const data = (await error.response.json()) as any;
-
-          for (const [key, value] of Object.entries(data.errors)) {
-            form.setError(key as any, { message: value as string });
-          }
-        },
-
-        onSuccess: (data) => {
-          toast({
-            title: 'Login Successfull',
-            duration: 1000,
-          });
-
-          document.cookie = `token=${data.token}`;
-          router.replace('/');
-          router.refresh();
-        },
-      },
-    );
+    updateUser({ ...values, photo: imageRef?.current?.files?.[0] || null });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5">
+          <FormField
+            control={form.control}
+            name="photo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Avatar</FormLabel>
+                <FormControl>
+                  <Input
+                    accept="image/*"
+                    type="file"
+                    {...field}
+                    ref={imageRef}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="firstname"
@@ -146,7 +155,10 @@ export function RegisterForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue="">
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value.toString()}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a gender" />
@@ -168,7 +180,10 @@ export function RegisterForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Country</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue="">
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value.toString()}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a country" />
@@ -230,21 +245,12 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="*****" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="passwordConfirm"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="*****" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="*****"
+                    autoComplete="new-password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -255,6 +261,7 @@ export function RegisterForm() {
         <Button
           loading={isLoading}
           size="lg"
+          variant="outline"
           className="mt-6 w-full font-semibold"
           type="submit"
         >

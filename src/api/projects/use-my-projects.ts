@@ -19,15 +19,8 @@ type Response = {
   };
 };
 
-type Variables = {
-  page_param?: number;
-  q?: string;
-};
-
-export const useProjects = async ({ page_param, q }: Variables) => {
-  const projects: unknown = await client
-    .get(`projects?page=${page_param ?? 1}&${q ? `q=${q}` : ''}`)
-    .json();
+export const useMyProjects = async () => {
+  const projects: unknown = await client.get(`my-projects`).json();
 
   return projects as Response;
 };

@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
   name: z
@@ -50,6 +51,8 @@ export function ProjectForm({ tags }: { tags: Tag[] }) {
     return tags.map((tag) => ({ value: tag.id, label: tag.name }));
   }, [tags]);
 
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,6 +69,8 @@ export function ProjectForm({ tags }: { tags: Tag[] }) {
       { ...values, photo: imageRef?.current?.files?.[0] },
       {
         onSuccess: () => {
+          toast({ title: 'Project created successfully' });
+
           router.replace('/');
           router.refresh();
         },
@@ -129,7 +134,12 @@ export function ProjectForm({ tags }: { tags: Tag[] }) {
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <Input type="file" {...field} ref={imageRef} />
+                  <Input
+                    accept="image/*"
+                    type="file"
+                    {...field}
+                    ref={imageRef}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
